@@ -1,0 +1,91 @@
+name: canvas
+
+x-canvas-runtime: &canvas-runtime
+  image: ghcr.io/b2ta/canvas:latest
+  restart: unless-stopped
+  env_file:
+    - .env.canvas
+  environment:
+    RAILS_ENV: production
+    CANVAS_DATABASE_HOST: postgres
+    CANVAS_DATABASE_PRODUCTION: canvas_production
+    CANVAS_DATABASE_USERNAME: postgres
+  depends_on:
+    postgres:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  volumes:
+    # These files contain deployment-specific settings and secrets. Create them
+    # under deployment/canvas/config before starting Canvas.
+    - ./config/database.yml:/usr/src/app/config/database.yml:ro
+    - ./config/security.yml:/usr/src/app/config/security.yml:ro
+    - ./config/domain.yml:/usr/src/app/config/domain.yml:ro
+    - ./config/file_store.yml:/usr/src/app/config/file_store.yml:ro
+    - ./config/redis.yml:/usr/src/app/config/redis.yml:ro
+    - ./config/cache_store.yml:/usr/src/app/config/cache_store.yml:ro
+    - ./config/delayed_jobs.yml:/usr/src/app/config/delayed_jobs.yml:ro
+    - ./config/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml:ro
+    - ./config/production-local.rb:/usr/src/app/config/environments/production-local.rb:ro
+    - canvas-files:/usr/src/app/tmp/files
+    - canvas-brandable-css:/usr/src/app/public/dist/brandable_css
+    - canvas-log:/usr/src/app/log
+
+services:
+  web:
+    <<: *canvas-runtime
+    ports:
+      - "${CANVAS_BIND:-127.0.0.1:3000}:80"
+
+  jobs:
+    <<: *canvas-runtime
+    command: bundle exec script/delayed_job run
+
+  # Run this once after PostgreSQL is healthy, before starting web/jobs:
+  # docker compose --env-file .env.canvas --profile init run --rm init
+  init:
+    <<: *canvas-runtime
+    profiles:
+      - init
+    restart: "no"
+    command: bundle exec rake db:initial_setup
+
+  postgres:
+    image: ${POSTGRES_IMAGE:-pgvector/pgvector:pg18}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD or use --env-file .env.canvas}
+      POSTGRES_DB: canvas_production
+    command:
+      - postgres
+      - -c
+      - max_locks_per_transaction=640
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - effective_cache_size=256MB
+      - -c
+      - random_page_cost=1.0
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d canvas_production"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - canvas-postgres:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  canvas-postgres:
+  canvas-files:
+  canvas-brandable-css:
+  canvas-log:

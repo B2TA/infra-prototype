@@ -1,0 +1,14 @@
+development:
+  storage: local
+  path_prefix: tmp/files
+
+test:
+  storage: local
+  path_prefix: tmp/files
+
+production:
+  storage: local
+  path_prefix: tmp/files
+
+# For a longer-lived deployment, replace the production block with S3
+# storage and add the corresponding config/amazon_s3.yml settings.

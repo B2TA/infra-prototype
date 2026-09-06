@@ -1,0 +1,9 @@
+production:
+  domain: <%= ENV.fetch("CANVAS_DOMAIN", "canvas.example.com") %>
+  ssl: <%= ENV.fetch("CANVAS_SSL", "true") %>
+
+development:
+  domain: <%= ENV.fetch("CANVAS_DOMAIN", "canvas.example.com") %>
+
+test:
+  domain: localhost
