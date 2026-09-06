@@ -77,3 +77,20 @@ ssh -i ~/.ssh/id_ed25519 admin@$(tofu output -raw lms_public_ip)
 
 If `ssh_public_key_path` points to another key, pass its corresponding private
 key to `ssh -i` instead.
+
+## Disk resize
+
+In case disk in opentofu file get resize, filesystem resize need to be applied on Debian as well to be able to utlize extra space.
+
+```
+sudo apt update
+sudo apt install -y cloud-guest-utils
+sudo growpart /dev/nvme0n1 1
+sudo resize2fs /dev/nvme0n1p1
+df -h /
+```
+
+## Instance Setup
+
+[Install docker](https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script)
+[Install Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)
