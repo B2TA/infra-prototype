@@ -1,7 +1,7 @@
 name: canvas
 
 x-canvas-runtime: &canvas-runtime
-  image: ghcr.io/b2ta/canvas:latest
+  image: ghcr.io/b2ta/canvas-lms:latest
   restart: unless-stopped
   env_file:
     - .env.canvas
