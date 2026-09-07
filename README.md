@@ -94,3 +94,12 @@ df -h /
 
 [Install docker](https://docs.docker.com/engine/install/debian/#install-using-the-convenience-script)
 [Install Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian)
+
+## LMS deployments
+
+- [Canvas](deployment/canvas/README.md)
+- [PrairieLearn](deployment/prairielearn/README.md)
+
+Both Compose projects bind their application port to localhost so Caddy can be
+the only public HTTP/HTTPS entry point. Canvas uses port 3000 and PrairieLearn
+uses port 3001, allowing both to run on the same EC2 instance.

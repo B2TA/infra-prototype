@@ -1,0 +1,21 @@
+name: prairielearn
+
+services:
+  app:
+    # PrairieLearn documents us-prod-live as the stable image that matches its
+    # hosted production deployment. Override PRAIRIELEARN_IMAGE to test another
+    # tag without editing this file.
+    image: ${PRAIRIELEARN_IMAGE:-prairielearn/prairielearn:us-prod-live}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    ports:
+      # Keep PrairieLearn private behind the host's HTTPS reverse proxy.
+      - "${PRAIRIELEARN_BIND:-127.0.0.1:3001}:3000"
+    volumes:
+      - postgres:/var/postgres
+      - ./config.json:/PrairieLearn/config.json:ro
+      - ./courses:/courses
+
+volumes:
+  postgres:
