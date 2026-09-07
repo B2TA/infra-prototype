@@ -1,0 +1,13 @@
+production:
+  # The test stack discards mail. Replace this block with SMTP settings when
+  # an integration test needs to inspect or deliver email.
+  delivery_method: test
+  domain: <%= ENV.fetch("CANVAS_DOMAIN", "canvas.example.com") %>
+  outgoing_address: <%= ENV.fetch("CANVAS_OUTGOING_EMAIL", "canvas@example.com") %>
+  default_name: CIC Hack Canvas
+
+development:
+  delivery_method: test
+  domain: <%= ENV.fetch("CANVAS_DOMAIN", "canvas.example.com") %>
+  outgoing_address: <%= ENV.fetch("CANVAS_OUTGOING_EMAIL", "canvas@example.com") %>
+  default_name: CIC Hack Canvas

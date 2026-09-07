@@ -97,12 +97,26 @@ resource "aws_instance" "lms-instance" {
   vpc_security_group_ids      = [module.lms_security_group.id]
   key_name                    = aws_key_pair.lms.key_name
 
+  root_block_device {
+    volume_size = 40
+    volume_type = "gp3"
+  }
+
+  tags = {
+    Name = "lms"
+  }
+}
+
+resource "aws_eip" "lms" {
+  domain   = "vpc"
+  instance = aws_instance.lms-instance.id
+
   tags = {
     Name = "lms"
   }
 }
 
 output "lms_public_ip" {
-  description = "Public IPv4 address of the LMS instance"
-  value       = aws_instance.lms-instance.public_ip
+  description = "Static public IPv4 address of the LMS instance"
+  value       = aws_eip.lms.public_ip
 }
