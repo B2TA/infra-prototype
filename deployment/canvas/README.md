@@ -13,9 +13,8 @@ chmod 600 .env.canvas
 ```
 
 Update `CANVAS_DOMAIN` in `.env.canvas` with the hostname that users will use
-to reach Canvas. Set `CANVAS_SSL=false` only when Canvas is served over plain
-HTTP. The other files under `config/` are safe starting points for this test
-deployment.
+to reach Canvas. The other files under `config/` are safe starting points for
+this test deployment.
 
 Initialize the database and first administrator account once:
 
