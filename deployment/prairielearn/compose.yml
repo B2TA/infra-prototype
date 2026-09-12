@@ -16,6 +16,8 @@ services:
       - postgres:/var/postgres
       - ./config.json:/PrairieLearn/config.json:ro
       - ./courses:/courses
+      # Read-only SSH credentials for PrairieLearn's GitHub operations.
+      - "${PRAIRIELEARN_SSH_DIR:-/home/admin/.ssh}:/root/.ssh:ro"
 
 volumes:
   postgres:

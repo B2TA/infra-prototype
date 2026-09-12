@@ -1,5 +1,6 @@
 {
   "serverCanonicalHost": "https://pl.example.com",
+  "trustProxy": 1,
   "cookieDomain": ".pl.example.com",
   "secretKey": "replace-with-a-random-64-character-hex-value",
   "databaseEncryptionKey": "replace-with-a-different-random-64-character-hex-value",

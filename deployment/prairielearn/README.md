@@ -53,6 +53,21 @@ The template is tuned for this small instance:
 Do not set `workersExecutionMode` to `disabled`: the native Python worker is
 needed for ordinary questions and elements that execute `server.py`.
 
+## Configure GitHub access for PrairieLearn
+
+The Compose file mounts the host user's SSH directory read-only. Add the public key used by the server to the course repository as a deploy key:
+
+```bash
+ls -la /home/admin/.ssh
+cat /home/admin/.ssh/id_ed25519.pub
+```
+
+If the server uses a different key name, configure it
+in `/home/admin/.ssh/config`.
+
+If the key directory is elsewhere, set `PRAIRIELEARN_SSH_DIR` before running
+Compose.
+
 ## Start PrairieLearn
 
 From this directory, start the service:
