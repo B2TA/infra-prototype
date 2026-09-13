@@ -1,0 +1,16 @@
+{
+  "serverCanonicalHost": "https://pl.example.com",
+  "trustProxy": 1,
+  "cookieDomain": ".pl.example.com",
+  "secretKey": "replace-with-a-random-64-character-hex-value",
+  "databaseEncryptionKey": "replace-with-a-different-random-64-character-hex-value",
+  "hasOauth": true,
+  "googleClientId": "replace-with-your-google-oauth-client-id",
+  "googleClientSecret": "replace-with-your-google-oauth-client-secret",
+  "googleRedirectUrl": "https://pl.example.com/pl/oauth2callback",
+  "coursesRoot": "/courses",
+  "courseDirs": [],
+  "workersCount": 1,
+  "postgresqlPoolSize": 10,
+  "workspaceEnable": false
+}
