@@ -1,4 +1,4 @@
-# Local project guidance
+# Project guidance
 
 - This is a disposable proof-of-concept deployment.
 - Prefer the simplest clear solution over production-grade best practices.
